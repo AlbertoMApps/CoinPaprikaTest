@@ -31,9 +31,9 @@ class CoinPaprikaRepositoryImplementation @Inject constructor(
             emit(Resource.Success(data = coinsFilteredByTag))
 
         } catch (e: HttpException) {
-            emit(Resource.Error(e.localizedMessage))
+            emit(Resource.Error(message = e.localizedMessage))
         } catch (e: IOException) {
-            emit(Resource.Error("Check your internet connection"))
+            emit(Resource.Error(message = "Check your internet connection"))
         }
     }
 

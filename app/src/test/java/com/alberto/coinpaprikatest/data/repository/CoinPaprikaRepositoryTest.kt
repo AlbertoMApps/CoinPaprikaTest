@@ -5,12 +5,12 @@ import com.alberto.coinpaprikatest.data.getCoin
 import com.alberto.coinpaprikatest.data.remote.api.CoinPaprikaApi
 import com.alberto.coinpaprikatest.domain.CoinRepositoryService
 import com.nhaarman.mockitokotlin2.whenever
+import junit.framework.Assert.assertEquals
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.ResponseBody
-import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
@@ -40,11 +40,11 @@ class CoinPaprikaRepositoryTest {
 
         val result = coinPaprikaRepositoryImplementation.getCoins().toList()
         coinPaprikaApi.getCoinInfo(getCoin().id).apply {
-            Assert.assertEquals(id, result[1].data?.get(0)?.id ?: "")
-            Assert.assertEquals(name, result[1].data?.get(0)?.name ?: "")
-            Assert.assertEquals(symbol, result[1].data?.get(0)?.symbol ?: "")
-            Assert.assertEquals(logo, result[1].data?.get(0)?.logo ?: "")
-            Assert.assertEquals(tags, result[1].data?.get(0)?.tags ?: listOf<Tag>())
+            assertEquals(id, result[1].data?.get(0)?.id ?: "")
+            assertEquals(name, result[1].data?.get(0)?.name ?: "")
+            assertEquals(symbol, result[1].data?.get(0)?.symbol ?: "")
+            assertEquals(logo, result[1].data?.get(0)?.logo ?: "")
+            assertEquals(tags, result[1].data?.get(0)?.tags ?: listOf<Tag>())
         }
     }
 
@@ -58,7 +58,7 @@ class CoinPaprikaRepositoryTest {
             )
 
         val result = coinPaprikaRepositoryImplementation.getCoins().toList()
-        Assert.assertEquals("HTTP 403 Response.error()", result[1].message)
+        assertEquals("HTTP 403 Response.error()", result[1].message)
     }
 
 }
