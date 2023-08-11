@@ -1,4 +1,4 @@
-package com.alberto.coinpaprikatest.ui.screens
+package com.alberto.coinpaprikatest.presentation.ui.screens
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -9,7 +9,7 @@ import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.alberto.coinpaprikatest.ui.theme.CoinPaprikaTestTheme
+import com.alberto.coinpaprikatest.presentation.ui.theme.CoinPaprikaTestTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

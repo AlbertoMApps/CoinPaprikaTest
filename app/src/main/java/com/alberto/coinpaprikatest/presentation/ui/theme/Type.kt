@@ -1,4 +1,4 @@
-package com.alberto.coinpaprikatest.ui.theme
+package com.alberto.coinpaprikatest.presentation.ui.theme
 
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle

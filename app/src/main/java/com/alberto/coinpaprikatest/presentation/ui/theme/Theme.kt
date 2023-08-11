@@ -1,4 +1,4 @@
-package com.alberto.coinpaprikatest.ui.theme
+package com.alberto.coinpaprikatest.presentation.ui.theme
 
 import android.app.Activity
 import androidx.compose.foundation.isSystemInDarkTheme
