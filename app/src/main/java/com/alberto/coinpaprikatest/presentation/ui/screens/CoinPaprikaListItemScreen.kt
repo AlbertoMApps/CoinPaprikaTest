@@ -3,29 +3,29 @@ package com.alberto.coinpaprikatest.presentation.ui.screens
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Card
+import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.rememberAsyncImagePainter
+import coil.compose.AsyncImage
+import com.alberto.coinpaprikatest.R
 import com.alberto.coinpaprikatest.data.remote.model.Coin
-import com.alberto.coinpaprikatest.data.remote.model.Tag
-import com.alberto.coinpaprikatest.presentation.ui.theme.CoinPaprikaTestTheme
 
 @Composable
-fun CoinPaprikaListItem(
+fun CoinPaprikaListItemScreen(
     coin: Coin,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -33,6 +33,9 @@ fun CoinPaprikaListItem(
         modifier = modifier
             .padding(vertical = 4.dp, horizontal = 8.dp)
             .fillMaxWidth()
+            .clickable {
+                onClick()
+            }
     ) {
         CardContent(coin)
     }
@@ -53,41 +56,25 @@ private fun CardContent(coin: Coin) {
     ) {
         Column(
             modifier = Modifier
+                .weight(1f)
                 .padding(12.dp)
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Image(
-                painter = rememberAsyncImagePainter(model = coin.logo),
-                contentScale = ContentScale.Fit,
+            AsyncImage(
+                model = coin.logo,
                 contentDescription = null,
-                modifier = Modifier.fillMaxHeight()
+                error = painterResource(id = R.drawable.ic_launcher_background),
+                modifier = Modifier.padding(bottom = 8.dp)
             )
             Text(
                 text = coin.name.plus("(").plus(coin.symbol).plus(")") ?: "",
-                style = MaterialTheme.typography.h2.copy(
+                style = MaterialTheme.typography.h5.copy(
                     fontWeight = FontWeight.ExtraBold
-                )
+                ),
+                modifier = Modifier.padding(bottom = 8.dp)
             )
+            Divider()
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun CoinPaprikaListItemPreview() {
-    CoinPaprikaTestTheme {
-        CoinPaprikaListItem(
-            Coin(
-                id = "btc-bitcoin",
-                name = "Bitcoin",
-                symbol = "BTC",
-                logo = "https://static.coinpaprika.com/coin/bnb-binance-coin/logo.png",
-                tags = listOf(
-                    Tag(
-                        id = "blockchain-service",
-                        name = "Blockchain Service"
-                    )
-                )
-            )
-        )
     }
 }
