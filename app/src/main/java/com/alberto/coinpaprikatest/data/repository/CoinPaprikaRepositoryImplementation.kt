@@ -23,33 +23,29 @@ class CoinPaprikaRepositoryImplementation @Inject constructor(
      */
     override fun getCoins(): Flow<Resource<List<Coin>>> = flow {
         val coinPaprikaTableList = coinPaprikaDao.getCoinTableList()
-        val coinsFilteredByTag = arrayListOf<Coin>()
         emit(Resource.Loading())
         if (coinPaprikaTableList.isNotEmpty()) {
             emit(Resource.Loading(coinPaprikaDao.getCoinTableList().toCoins()))
         }
 
         try {
+            val coinsInfo = arrayListOf<Coin>()
             val coins = coinPaprikaApi.getCoins()
             coins.forEach { coin ->
                 val coinInfo = coinPaprikaApi.getCoinInfo(coin.id)
-                val coinFilteredByTag = if (!coinInfo.tags.isNullOrEmpty()) coinInfo else null
-                coinFilteredByTag?.let { coinsFilteredByTag.add(it) }
+                coinsInfo.add(coinInfo)
             }
-            coinsFilteredByTag.sortBy { it.name }
+            coinsInfo
+                .filter { !it.tags.isNullOrEmpty() }
+                .sortedBy { it.name }
             coinPaprikaDao.deleteCoinTableList()
-            coinPaprikaDao.insertCoinTableList(coinsFilteredByTag.toCoinsTable())
+            coinPaprikaDao.insertCoinTableList(coinsInfo.toCoinsTable())
+            emit(Resource.Success(data = coinPaprikaTableList.toCoins()))
 
         } catch (e: HttpException) {
             emit(Resource.Error(message = e.localizedMessage))
         } catch (e: IOException) {
             emit(Resource.Error(message = "Check your internet connection"))
-        }
-
-        if (coinPaprikaTableList.isEmpty()) {
-            emit(Resource.Success(data = coinsFilteredByTag))
-        } else {
-            emit(Resource.Success(data = coinPaprikaTableList.toCoins()))
         }
 
     }

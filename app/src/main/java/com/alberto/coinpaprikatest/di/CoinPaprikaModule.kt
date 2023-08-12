@@ -4,7 +4,6 @@ import android.app.Application
 import android.util.Log
 import androidx.room.Room
 import com.alberto.coinpaprikatest.data.common.Constants.COIN_PAPRIKA_BASE_URL
-import com.alberto.coinpaprikatest.data.local.converters.TagConverter
 import com.alberto.coinpaprikatest.data.local.dao.CoinPaprikaDao
 import com.alberto.coinpaprikatest.data.local.database.CoinPaprikaDatabase
 import com.alberto.coinpaprikatest.data.remote.api.CoinPaprikaApi
@@ -90,9 +89,7 @@ object CoinPaprikaModule {
             application,
             CoinPaprikaDatabase::class.java,
             "coin_paprika_db"
-        )
-            .addTypeConverter(TagConverter::class.java)
-            .build()
+        ).build()
 
     @Provides
     fun provideCoinPaprikaDao(db: CoinPaprikaDatabase): CoinPaprikaDao =

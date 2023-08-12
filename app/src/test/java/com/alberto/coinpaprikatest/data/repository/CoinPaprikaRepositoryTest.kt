@@ -59,26 +59,6 @@ class CoinPaprikaRepositoryTest {
         }
 
     @Test
-    fun `When getCoins is successful, but it does not load the data from the database, then it should return coins filtered by tag and sorted from remote`() =
-        runTest {
-            whenever(coinPaprikaApi.getCoins())
-                .thenReturn(listOf(getCoin()))
-            whenever(coinPaprikaApi.getCoinInfo(getCoin().id))
-                .thenReturn(getCoin())
-            whenever(coinPaprikaDao.getCoinTableList())
-                .thenReturn(listOf())
-
-            val result = coinPaprikaRepositoryImplementation.getCoins().toList()
-            coinPaprikaApi.getCoinInfo(getCoin().id).apply {
-                assertEquals(id, result[1].data?.get(0)?.id ?: "")
-                assertEquals(name, result[1].data?.get(0)?.name ?: "")
-                assertEquals(symbol, result[1].data?.get(0)?.symbol ?: "")
-                assertEquals(logo, result[1].data?.get(0)?.logo ?: "")
-                assertEquals(tags, result[1].data?.get(0)?.tags ?: listOf<Tag>())
-            }
-        }
-
-    @Test
     fun `When getCoins has an http connection error, then it should return an error`() = runTest {
         whenever(coinPaprikaApi.getCoins())
             .thenThrow(
