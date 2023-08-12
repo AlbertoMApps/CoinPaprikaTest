@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.alberto.coinpaprikatest.data.remote.model.Coin
 import com.alberto.coinpaprikatest.presentation.CoinPaprikaViewModel
+import com.alberto.coinpaprikatest.presentation.ui.ErrorLabel
 import com.alberto.coinpaprikatest.presentation.ui.theme.CoinPaprikaTestTheme
 import com.alberto.coinpaprikatest.utils.getCoin
 import com.google.accompanist.swiperefresh.SwipeRefresh
@@ -25,8 +26,10 @@ fun CoinPaprikaList(
 ) {
     val coins: List<Coin> = viewModel.state.value.data
     val isLoading = viewModel.state.value.isLoading
+    val errorMessage = viewModel.state.value.errorMessage
     val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = isLoading)
     SwipeReFreshScreen(swipeRefreshState, viewModel::getCoins, coins)
+    if (errorMessage.isNotEmpty()) ErrorLabel(errorMessage = errorMessage)
 }
 
 @Composable
@@ -57,7 +60,7 @@ private fun CoinPaprikaListScreen(
         ) {
             items(items = coins) { coin ->
                 CoinPaprikaListItemScreen(coin, {
-
+                    //Add navigation to the second screen here!
                 })
             }
         }
