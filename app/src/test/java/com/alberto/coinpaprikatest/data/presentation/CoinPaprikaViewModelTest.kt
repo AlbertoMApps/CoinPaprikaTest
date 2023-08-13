@@ -39,7 +39,7 @@ class CoinPaprikaViewModelTest {
     }
 
     @Test
-    fun `When the repository service is loading, then the view model should be loading`() =
+    fun `When the repository service is loading a list of coins, then the view model should be loading`() =
         runTest {
             val flow = flow {
                 emit(Resource.Loading(data = emptyList<Coin>()))
@@ -53,7 +53,7 @@ class CoinPaprikaViewModelTest {
         }
 
     @Test
-    fun `When the repository service is successful, then the view model should return a list of coins`() =
+    fun `When the repository service has a list of coins, then the view model should return them`() =
         runTest {
             val flow = flow {
                 emit(Resource.Success(data = listOf(getCoin())))
@@ -67,7 +67,7 @@ class CoinPaprikaViewModelTest {
         }
 
     @Test
-    fun `When the repository service has an error, then the view model should return an unexpected error`() =
+    fun `When the repository service has an error after loading a list of coins, then the view model should return an unexpected error`() =
         runTest {
             val flow = flow {
                 emit(
@@ -83,6 +83,19 @@ class CoinPaprikaViewModelTest {
             assertEquals(false, state.isLoading)
             assertEquals("Unexpected error loading coins", state.errorMessage)
             assertEquals(emptyList<Coin>(), state.data)
+        }
+
+    @Test
+    fun `When the repository service gets a coin, then the view model should return a coin selected by id`() =
+        runTest {
+            val flow = flow {
+                emit(Resource.Success(data = Coin()))
+            }
+            every { coinRepositoryService.getCoin("btc-bitcoin") } returns flow
+            viewModel = CoinPaprikaViewModel(coinRepositoryService)
+            val state = viewModel.coinState.value
+            assertEquals("", state.errorMessage)
+            assertEquals(Coin(), state.data)
         }
 
 }

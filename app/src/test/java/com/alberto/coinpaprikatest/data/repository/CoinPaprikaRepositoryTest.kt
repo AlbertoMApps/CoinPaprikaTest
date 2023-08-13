@@ -3,6 +3,7 @@ package com.alberto.coinpaprikatest.data.repository
 import android.nfc.Tag
 import com.alberto.coinpaprikatest.data.getCoin
 import com.alberto.coinpaprikatest.data.local.dao.CoinPaprikaDao
+import com.alberto.coinpaprikatest.data.mappers.toCoin
 import com.alberto.coinpaprikatest.data.mappers.toCoinTable
 import com.alberto.coinpaprikatest.data.mappers.toCoins
 import com.alberto.coinpaprikatest.data.remote.api.CoinPaprikaApi
@@ -72,5 +73,17 @@ class CoinPaprikaRepositoryTest {
         val result = coinPaprikaRepositoryImplementation.getCoins().toList()
         assertEquals("HTTP 403 Response.error()", result[1].message)
     }
+
+    @Test
+    fun `When getCoin(id) is successful, then it returns a coin by ID from the database`() =
+        runTest {
+
+            whenever(
+                coinPaprikaDao.getCoinTable("btc-bitcoin")
+            ).thenReturn(getCoin().toCoinTable())
+
+            val result = coinPaprikaRepositoryImplementation.getCoin("btc-bitcoin").toList()
+            assertEquals(coinPaprikaDao.getCoinTable("btc-bitcoin").toCoin(), result[0].data)
+        }
 
 }
