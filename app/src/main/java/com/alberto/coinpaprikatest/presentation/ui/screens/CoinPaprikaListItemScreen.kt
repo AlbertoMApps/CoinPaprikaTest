@@ -68,7 +68,7 @@ private fun CardContent(coin: Coin) {
                 modifier = Modifier.padding(bottom = 8.dp)
             )
             Text(
-                text = coin.name.plus("(").plus(coin.symbol).plus(")") ?: "",
+                text = coin.name.plus("(").plus(coin.symbol).plus(")"),
                 style = MaterialTheme.typography.h5.copy(
                     fontWeight = FontWeight.ExtraBold
                 ),

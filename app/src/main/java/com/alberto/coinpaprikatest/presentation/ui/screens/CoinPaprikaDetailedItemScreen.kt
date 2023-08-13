@@ -5,9 +5,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -30,9 +30,15 @@ import com.alberto.coinpaprikatest.utils.getCoin
 
 @Composable
 fun CoinPaprikaDetailedItem(
-    viewModel: CoinPaprikaViewModel = hiltViewModel()
+    viewModel: CoinPaprikaViewModel = hiltViewModel(),
+    coinId: String?
 ) {
-    val coin = viewModel.state.value.data[0]
+    coinId?.let { viewModel.getCoin(it) }
+    val coin = viewModel.coinState.value.data
+    val errorMessage = viewModel.coinState.value.errorMessage
+    if (errorMessage.isNotEmpty()) {
+        ErrorLabel(errorMessage = errorMessage)
+    }
     CoinPaprikaDetailedItemScreen(coin)
 }
 
@@ -41,9 +47,10 @@ fun CoinPaprikaDetailedItemScreen(coin: Coin) {
     Column(
         modifier = Modifier
             .padding(12.dp)
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         AsyncImage(
             model = coin.logo,
@@ -68,21 +75,14 @@ fun CoinPaprikaDetailedItemScreen(coin: Coin) {
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(all = 24.dp)
         )
-        LazyRow(
-            modifier = Modifier
-                .padding(vertical = 4.dp)
-        ) {
-            coin.tags?.let { tags ->
-                items(items = tags) { tag ->
-                    Text(
-                        text = "#".plus(tag.name),
-                        style = MaterialTheme.typography.body1.copy(
-                            fontWeight = FontWeight.ExtraBold
-                        ),
-                        modifier = Modifier.padding(bottom = 8.dp)
-                    )
-                }
-            }
+        coin.tags?.forEach { tag ->
+            Text(
+                text = "#".plus(tag.name),
+                style = MaterialTheme.typography.body1.copy(
+                    fontWeight = FontWeight.ExtraBold
+                ),
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
         }
     }
 }

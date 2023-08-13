@@ -11,43 +11,38 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.alberto.coinpaprikatest.data.remote.model.Coin
 import com.alberto.coinpaprikatest.presentation.CoinPaprikaViewModel
 import com.alberto.coinpaprikatest.presentation.ui.theme.CoinPaprikaTestTheme
 import com.alberto.coinpaprikatest.utils.getCoin
-import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.SwipeRefreshState
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 
 @Composable
 fun CoinPaprikaList(
-    viewModel: CoinPaprikaViewModel = hiltViewModel()
+    viewModel: CoinPaprikaViewModel = hiltViewModel(),
+    navigation: NavController
 ) {
-    val coins: List<Coin> = viewModel.state.value.data
-    val isLoading = viewModel.state.value.isLoading
-    val errorMessage = viewModel.state.value.errorMessage
+    val coins: List<Coin> = viewModel.coinsListState.value.data
+    val isLoading = viewModel.coinsListState.value.isLoading
+    val errorMessage = viewModel.coinsListState.value.errorMessage
     val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = isLoading)
-    SwipeReFreshScreen(swipeRefreshState, viewModel::getCoins, coins)
-    if (errorMessage.isNotEmpty()) ErrorLabel(errorMessage = errorMessage)
-}
-
-@Composable
-private fun SwipeReFreshScreen(
-    swipeRefreshState: SwipeRefreshState,
-    onRefresh: () -> Unit,
-    coins: List<Coin>
-) {
-    SwipeRefresh(
-        state = swipeRefreshState,
-        onRefresh = onRefresh
-    ) {
-        CoinPaprikaListScreen(coins)
+    SwipeReFreshCoinsScreen(
+        swipeRefreshState,
+        viewModel::getCoins,
+        coins,
+        navigation
+    )
+    if (errorMessage.isNotEmpty()) {
+        ErrorLabel(errorMessage = errorMessage)
     }
 }
 
 @Composable
-private fun CoinPaprikaListScreen(
-    coins: List<Coin>
+fun CoinPaprikaListScreen(
+    coins: List<Coin>,
+    navigation: NavController
 ) {
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -59,8 +54,7 @@ private fun CoinPaprikaListScreen(
         ) {
             items(items = coins) { coin ->
                 CoinPaprikaListItemScreen(coin, {
-                    //Add navigation to the second screen here!
-                    coin.id
+                    navigation.navigate(Screen.CoinPaprikaDetailedItem.route.plus("/${coin.id}"))
                 })
             }
         }
@@ -76,7 +70,8 @@ private fun CoinPaprikaListScreenPreview() {
                 getCoin(),
                 getCoin(),
                 getCoin()
-            )
+            ),
+            rememberNavController()
         )
     }
 }

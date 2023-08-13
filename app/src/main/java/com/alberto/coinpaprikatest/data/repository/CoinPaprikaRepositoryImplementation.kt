@@ -1,6 +1,7 @@
 package com.alberto.coinpaprikatest.data.repository
 
 import com.alberto.coinpaprikatest.data.local.dao.CoinPaprikaDao
+import com.alberto.coinpaprikatest.data.mappers.toCoin
 import com.alberto.coinpaprikatest.data.mappers.toCoins
 import com.alberto.coinpaprikatest.data.mappers.toCoinsTable
 import com.alberto.coinpaprikatest.data.remote.api.CoinPaprikaApi
@@ -53,7 +54,8 @@ class CoinPaprikaRepositoryImplementation @Inject constructor(
     /*
     * This operation will get a coin by Id from the list of coins previously cached in the database.
      */
-    override fun getCoin(id: String) {
-
+    override fun getCoin(id: String): Flow<Resource<Coin>> = flow {
+        val coin = coinPaprikaDao.getCoinTable(id).toCoin()
+        emit(Resource.Success(data = coin))
     }
 }

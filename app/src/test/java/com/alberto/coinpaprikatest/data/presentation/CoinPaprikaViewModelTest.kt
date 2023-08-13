@@ -46,7 +46,7 @@ class CoinPaprikaViewModelTest {
             }
             every { coinRepositoryService.getCoins() } returns flow
             viewModel = CoinPaprikaViewModel(coinRepositoryService)
-            val state = viewModel.state.value
+            val state = viewModel.coinsListState.value
             assertEquals(true, state.isLoading)
             assertEquals("", state.errorMessage)
             assertEquals(emptyList<Coin>(), state.data)
@@ -60,7 +60,7 @@ class CoinPaprikaViewModelTest {
             }
             every { coinRepositoryService.getCoins() } returns flow
             viewModel = CoinPaprikaViewModel(coinRepositoryService)
-            val state = viewModel.state.value
+            val state = viewModel.coinsListState.value
             assertEquals(false, state.isLoading)
             assertEquals("", state.errorMessage)
             assertEquals(listOf(getCoin()), state.data)
@@ -79,7 +79,7 @@ class CoinPaprikaViewModelTest {
             }
             every { coinRepositoryService.getCoins() } returns flow
             viewModel = CoinPaprikaViewModel(coinRepositoryService)
-            val state = viewModel.state.value
+            val state = viewModel.coinsListState.value
             assertEquals(false, state.isLoading)
             assertEquals("Unexpected error loading coins", state.errorMessage)
             assertEquals(emptyList<Coin>(), state.data)
