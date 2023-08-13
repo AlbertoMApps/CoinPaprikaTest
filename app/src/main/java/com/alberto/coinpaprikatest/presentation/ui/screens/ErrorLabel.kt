@@ -1,4 +1,4 @@
-package com.alberto.coinpaprikatest.presentation.ui
+package com.alberto.coinpaprikatest.presentation.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

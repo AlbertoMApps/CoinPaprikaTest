@@ -25,6 +25,9 @@ class CoinPaprikaViewModel @Inject constructor(
         getCoins()
     }
 
+    /*
+    * getCoins() propagate states for coins based on its repository
+     */
     fun getCoins() {
         getCoinsJob?.cancel()
         getCoinsJob = viewModelScope.launch {

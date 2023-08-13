@@ -13,7 +13,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.alberto.coinpaprikatest.data.remote.model.Coin
 import com.alberto.coinpaprikatest.presentation.CoinPaprikaViewModel
-import com.alberto.coinpaprikatest.presentation.ui.ErrorLabel
 import com.alberto.coinpaprikatest.presentation.ui.theme.CoinPaprikaTestTheme
 import com.alberto.coinpaprikatest.utils.getCoin
 import com.google.accompanist.swiperefresh.SwipeRefresh
@@ -61,6 +60,7 @@ private fun CoinPaprikaListScreen(
             items(items = coins) { coin ->
                 CoinPaprikaListItemScreen(coin, {
                     //Add navigation to the second screen here!
+                    coin.id
                 })
             }
         }

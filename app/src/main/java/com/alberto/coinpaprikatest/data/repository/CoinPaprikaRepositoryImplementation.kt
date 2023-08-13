@@ -22,15 +22,12 @@ class CoinPaprikaRepositoryImplementation @Inject constructor(
     * This operation will display coins filtered by tag sorted by name and saved in cache.
      */
     override fun getCoins(): Flow<Resource<List<Coin>>> = flow {
-        val coinPaprikaTableList = coinPaprikaDao.getCoinTableList()
         emit(Resource.Loading())
-        if (coinPaprikaTableList.isNotEmpty()) {
-            emit(Resource.Loading(coinPaprikaDao.getCoinTableList().toCoins()))
-        }
 
         try {
             val coinsInfo = arrayListOf<Coin>()
-            val coins = coinPaprikaApi.getCoins()
+            //Here we just limit the numbers of coins to show, because there's a limit of 60 requests per hour in the free version of the API.
+            val coins = coinPaprikaApi.getCoins().take(10)
             coins.forEach { coin ->
                 val coinInfo = coinPaprikaApi.getCoinInfo(coin.id)
                 coinsInfo.add(coinInfo)
@@ -40,12 +37,15 @@ class CoinPaprikaRepositoryImplementation @Inject constructor(
                 .sortedBy { it.name }
             coinPaprikaDao.deleteCoinTableList()
             coinPaprikaDao.insertCoinTableList(coinsInfo.toCoinsTable())
-            emit(Resource.Success(data = coinPaprikaTableList.toCoins()))
 
         } catch (e: HttpException) {
-            emit(Resource.Error(message = e.localizedMessage))
+            emit(Resource.Error(message = e.localizedMessage ?: "Coins could not be loaded"))
         } catch (e: IOException) {
             emit(Resource.Error(message = "Check your internet connection"))
+        }
+        val coinPaprikaTableList = coinPaprikaDao.getCoinTableList()
+        if (coinPaprikaTableList.isNotEmpty()) {
+            emit(Resource.Success(data = coinPaprikaTableList.toCoins()))
         }
 
     }
