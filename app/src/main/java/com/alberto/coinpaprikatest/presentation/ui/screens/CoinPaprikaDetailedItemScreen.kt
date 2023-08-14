@@ -67,6 +67,7 @@ fun CoinPaprikaDetailedItemScreen(coin: Coin) {
                 fontWeight = FontWeight.ExtraBold
             ),
             color = MaterialTheme.colors.primary,
+            textAlign = TextAlign.Center,
             modifier = Modifier.padding(bottom = 8.dp)
         )
         Text(

@@ -33,11 +33,11 @@ class CoinPaprikaRepositoryImplementation @Inject constructor(
                 val coinInfo = coinPaprikaApi.getCoinInfo(coin.id)
                 coinsInfo.add(coinInfo)
             }
-            coinsInfo
+            val newCoinsInfo = coinsInfo
                 .filter { !it.tags.isNullOrEmpty() }
                 .sortedBy { it.name }
             coinPaprikaDao.deleteCoinTableList()
-            coinPaprikaDao.insertCoinTableList(coinsInfo.toCoinsTable())
+            coinPaprikaDao.insertCoinTableList(newCoinsInfo.toCoinsTable())
 
         } catch (e: HttpException) {
             emit(Resource.Error(message = e.localizedMessage ?: "Coins could not be loaded"))
