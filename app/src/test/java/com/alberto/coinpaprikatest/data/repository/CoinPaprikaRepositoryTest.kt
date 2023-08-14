@@ -75,6 +75,25 @@ class CoinPaprikaRepositoryTest {
     }
 
     @Test
+    fun `When filterCoinsInfo gets called, then we return a coins list sorted and filtered by tags`() =
+        runTest {
+            val coinList = arrayListOf(
+                getCoin().copy(name = "Zorcoin", tags = listOf()),
+                getCoin().copy(name = "Yorcoin"),
+                getCoin().copy(name = "Xorcoin"),
+                getCoin().copy(name = "Bitcoin"),
+                getCoin().copy(name = "Botcoin")
+            )
+
+            val result = coinPaprikaRepositoryImplementation.sortCoinsInfo(coinList)
+            assertEquals("Bitcoin", result[0].name)
+            assertEquals("Botcoin", result[1].name)
+            assertEquals("Xorcoin", result[2].name)
+            assertEquals("Yorcoin", result[3].name)
+
+        }
+
+    @Test
     fun `When getCoin(id) is successful, then it returns a coin by ID from the database`() =
         runTest {
 

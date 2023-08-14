@@ -6,5 +6,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface CoinRepositoryService {
     fun getCoins(): Flow<Resource<List<Coin>>>
+    fun sortCoinsInfo(coinsInfo: ArrayList<Coin>): List<Coin>
     fun getCoin(id: String): Flow<Resource<Coin>>
 }

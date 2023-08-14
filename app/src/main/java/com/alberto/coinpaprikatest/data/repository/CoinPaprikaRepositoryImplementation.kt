@@ -53,10 +53,13 @@ class CoinPaprikaRepositoryImplementation @Inject constructor(
             val coinInfo = coinPaprikaApi.getCoinInfo(coin.id)
             coinsInfo.add(coinInfo)
         }
-        return coinsInfo
+        return sortCoinsInfo(coinsInfo)
+    }
+
+    override fun sortCoinsInfo(coinsInfo: ArrayList<Coin>) =
+        coinsInfo
             .filter { !it.tags.isNullOrEmpty() }
             .sortedBy { it.name }
-    }
 
     /**
      *This operation will get a coin by Id from the list of coins previously cached in the database.

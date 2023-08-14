@@ -1,9 +1,11 @@
 # CoinPaprikaTest
 Bitcoin tech test project app 
+
 - OVERVIEW
 1. Download	and	display	the	list	of	coins	from	this	API	endpoint:
    - Get	Coins:	https://api.coinpaprika.com/v1/coins
-   - Get	Coin	By	Id:	https://api.coinpaprika.com/v1/coins/{id}	
+   - Get	Coin	By	Id:	https://api.coinpaprika.com/v1/coins/{id}
+   
 - FUNCTIONALITY	
 1. When	the	app	is	started,	load	and	display	a	list of	coins	
 1. Order	entries	by	name
@@ -11,9 +13,10 @@ Bitcoin tech test project app
 3. Display	a	divider	between	each	entry	
 2. Display	any	extra	coin	info in	some	kind	of	popup/fragment	when	coin	entry	is	clicked	
 based	on	the	second	API	request,	with	said	id as	the	query.
-3. Provide	some	kind	of	refresh	option	that	reloads	the	list	
-4. Display	an	error	message	if	the	list	cannot	be	loaded	(e.g.	no	network)	
-5. (Extra	credit)	Animate	list	items	(hint	–	Jetpack	Compose	allows	this	easily
+3. Provide	some	kind	of	refresh	option	that	reloads	the	list.	
+4. Display	an	error	message	if	the	list	cannot	be	loaded	(e.g.	no	network).	
+5. (Extra	credit)	Animate	list	items	(hint	–	Jetpack	Compose	allows	this	easily.
+
 - DELIVERABLES
 1. Write	the	app	using	Kotlin	only.
 2. Use	Jetpack	Compose	for	UI.
@@ -27,6 +30,7 @@ commit	history
 
 
 ---------
+
 - PROJECT EXPLANATION:
 1. The project initially makes two requests to the given APIs to get all the information from the bitcoins searched by Id.
 2. The repository filters the list by tags and sorted by name.
@@ -36,19 +40,22 @@ commit	history
 6. The repository gets the information for the coin selected by id from the database.
 7. MVVM applied with coroutines to propagate states(loading, data an error messages) to the composable view.
 8. The UI is built in Jetpack compose for the list representation and easiness of features added like swipe to refresh and animation of lists.
-9. Elements used in jetpack compose: Lazy column for the list repreesentation, columns as main layouts, AsynImage for image representation with place holders, Texts, Cards and Dividers.
+9. Elements used in jetpack compose: Lazy column for the list representation, columns as main layouts, AsynImage for image representation with place holders, Texts, Cards and Dividers.
 10. Material components for reusable colors, theming, animation and typography used in the app.
 11. Unit tests were applied in the repository and view model to check the list representation, getting a coin information by Id and testing the states of the view model.
-- DESIGN PATTERS:
+
+-DESIGN PATTERS:
 1.  Builder - Retrofit API as a creational pattern.
 2.  Dependency Injection - Dagger Hilt for simplicity as it works well with the VM.
 3.  Singleton pattern as dependency injection modules.
 4.  Factory - Gson converter factory in Retrofit for parsing HTTP responses into an object.
 5.  Facade - GsonConverterFactory, working behind the scenes as a JSON deserializer.
 6.  States - Added along VM to propagate a wrap the flow results.
+
 - APP ARCHITECTURE:
 1. Model View ViewModel - Stores data and updates the views and models accordingly.
 2. Clean architecture - Data, Business logic, Presentation - VM and UI layers.
+
 - TECHNOLOGIES USED AND DEPENDENCIES:
 1. Kotlin - Main language of programming.
 2. Jetpack Compose - Jetpack Compose is Android’s modern toolkit for building native UI.
