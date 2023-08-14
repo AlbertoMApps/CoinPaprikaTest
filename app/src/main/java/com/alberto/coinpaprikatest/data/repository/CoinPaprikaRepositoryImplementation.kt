@@ -19,25 +19,16 @@ class CoinPaprikaRepositoryImplementation @Inject constructor(
     private val coinPaprikaDao: CoinPaprikaDao
 ) : CoinRepositoryService {
 
-    /*
-    * This operation will display coins filtered by tag sorted by name and saved in cache.
+    /**
+     * This operation will display coins filtered by tag sorted by name and saved in cache.
      */
     override fun getCoins(): Flow<Resource<List<Coin>>> = flow {
         emit(Resource.Loading())
 
         try {
-            val coinsInfo = arrayListOf<Coin>()
-            //Here we just limit the numbers of coins to show, because there's a limit of 60 requests per hour in the free version of the API.
-            val coins = coinPaprikaApi.getCoins().take(10)
-            coins.forEach { coin ->
-                val coinInfo = coinPaprikaApi.getCoinInfo(coin.id)
-                coinsInfo.add(coinInfo)
-            }
-            val newCoinsInfo = coinsInfo
-                .filter { !it.tags.isNullOrEmpty() }
-                .sortedBy { it.name }
+            val coinsInfo = getCoinsInfo()
             coinPaprikaDao.deleteCoinTableList()
-            coinPaprikaDao.insertCoinTableList(newCoinsInfo.toCoinsTable())
+            coinPaprikaDao.insertCoinTableList(coinsInfo.toCoinsTable())
 
         } catch (e: HttpException) {
             emit(Resource.Error(message = e.localizedMessage ?: "Coins could not be loaded"))
@@ -51,8 +42,24 @@ class CoinPaprikaRepositoryImplementation @Inject constructor(
 
     }
 
-    /*
-    * This operation will get a coin by Id from the list of coins previously cached in the database.
+    /**
+     * This function returns a new list of coins with all the information filtered by tags and sorted by name
+     */
+    private suspend fun getCoinsInfo(): List<Coin> {
+        val coinsInfo = arrayListOf<Coin>()
+        //Here we just limit the numbers of coins to show, because there's a limit of 60 requests per hour in the free version of the API.
+        val coins = coinPaprikaApi.getCoins().take(10)
+        coins.forEach { coin ->
+            val coinInfo = coinPaprikaApi.getCoinInfo(coin.id)
+            coinsInfo.add(coinInfo)
+        }
+        return coinsInfo
+            .filter { !it.tags.isNullOrEmpty() }
+            .sortedBy { it.name }
+    }
+
+    /**
+     *This operation will get a coin by Id from the list of coins previously cached in the database.
      */
     override fun getCoin(id: String): Flow<Resource<Coin>> = flow {
         val coin = coinPaprikaDao.getCoinTable(id).toCoin()
