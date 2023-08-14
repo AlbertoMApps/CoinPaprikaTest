@@ -44,7 +44,7 @@ commit	history
 10. Material components for reusable colors, theming, animation and typography used in the app.
 11. Unit tests were applied in the repository and view model to check the list representation, getting a coin information by Id and testing the states of the view model.
 
--DESIGN PATTERS:
+- DESIGN PATTERS:
 1.  Builder - Retrofit API as a creational pattern.
 2.  Dependency Injection - Dagger Hilt for simplicity as it works well with the VM.
 3.  Singleton pattern as dependency injection modules.
