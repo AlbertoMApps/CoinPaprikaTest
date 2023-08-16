@@ -1,5 +1,8 @@
 package com.alberto.coinpaprikatest.presentation.ui.screens
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import com.alberto.coinpaprikatest.data.remote.model.Coin
@@ -17,6 +20,12 @@ fun SwipeReFreshCoinsScreen(
         state = swipeRefreshState,
         onRefresh = onRefresh
     ) {
-        CoinPaprikaListScreen(coins, navigation)
+        AnimatedVisibility(
+            visible = !swipeRefreshState.isRefreshing,
+            enter = slideInVertically(),
+            exit = slideOutVertically()
+        ) {
+            CoinPaprikaListScreen(coins, navigation)
+        }
     }
 }

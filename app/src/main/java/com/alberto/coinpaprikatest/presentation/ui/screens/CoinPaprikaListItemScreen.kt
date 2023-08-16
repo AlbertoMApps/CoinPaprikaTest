@@ -75,6 +75,15 @@ private fun CardContent(coin: Coin) {
                 ),
                 modifier = Modifier.padding(bottom = 8.dp)
             )
+            if (!coin.description.isNullOrEmpty()) {
+                Text(
+                    text = coin.description,
+                    style = MaterialTheme.typography.body1,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.padding(bottom = 8.dp)
+                )
+            }
             Divider()
         }
     }
